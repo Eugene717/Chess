@@ -147,7 +147,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AI.cpp" />
+    <ClCompile Include="Bishop.cpp" />
+    <ClCompile Include="ChessFigure.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameDataPacket.cpp" />
+    <ClCompile Include="Horse.cpp" />
+    <ClCompile Include="Human.cpp" />
+    <ClCompile Include="King.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Pawn.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Queen.cpp" />
+    <ClCompile Include="Rock.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AI.h" />
+    <ClInclude Include="Bishop.h" />
+    <ClInclude Include="ChessFigure.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameDataPacket.h" />
+    <ClInclude Include="Horse.h" />
+    <ClInclude Include="Human.h" />
+    <ClInclude Include="King.h" />
+    <ClInclude Include="Pawn.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Queen.h" />
+    <ClInclude Include="Rock.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
