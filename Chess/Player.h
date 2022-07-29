@@ -16,6 +16,7 @@ public:
 	~Player();
 
 	bool DeleteKilled();
+	bool KingKilled();
 	char GetColor() const;
 	virtual bool Move() = 0;
 };

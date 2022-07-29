@@ -27,21 +27,23 @@ std::vector<sf::Vector2i> Pawn::CanMove() const
 		{
 			pos.push_back(sf::Vector2i(m_pos.x, m_pos.y - 1));
 		}		
-		if (m_pos.y == 6)
+		if (!m_firstTurn)
 			if (!pos.empty())
 				if (game->m_board[m_pos.x][m_pos.y - 2] == nullptr)
 					pos.push_back(sf::Vector2i(m_pos.x, m_pos.y - 2));
 
-		if (game->m_board[m_pos.x - 1][m_pos.y - 1] != nullptr)  //beat
-		{
-			if (game->m_board[m_pos.x - 1][m_pos.y - 1]->GetColor() != m_color)
-				pos.push_back(sf::Vector2i(m_pos.x - 1, m_pos.y - 1));
-		}
-		if (game->m_board[m_pos.x + 1][m_pos.y - 1] != nullptr)  //beat
-		{
-			if (game->m_board[m_pos.x + 1][m_pos.y - 1]->GetColor() != m_color)
-				pos.push_back(sf::Vector2i(m_pos.x + 1, m_pos.y - 1));
-		}
+		if (m_pos.x > 0 && m_pos.y > 0)
+			if (game->m_board[m_pos.x - 1][m_pos.y - 1] != nullptr)  //beat
+			{
+				if (game->m_board[m_pos.x - 1][m_pos.y - 1]->GetColor() != m_color)
+					pos.push_back(sf::Vector2i(m_pos.x - 1, m_pos.y - 1));
+			}
+		if (m_pos.x < 7 && m_pos.y > 0)
+			if (game->m_board[m_pos.x + 1][m_pos.y - 1] != nullptr)  //beat
+			{
+				if (game->m_board[m_pos.x + 1][m_pos.y - 1]->GetColor() != m_color)
+					pos.push_back(sf::Vector2i(m_pos.x + 1, m_pos.y - 1));
+			}
 	}
 	else
 	{
@@ -49,22 +51,23 @@ std::vector<sf::Vector2i> Pawn::CanMove() const
 		{
 			pos.push_back(sf::Vector2i(m_pos.x, m_pos.y + 1));
 		}
-		if (m_pos.y == 1)
+		if (!m_firstTurn)
 			if (!pos.empty())
 				if (game->m_board[m_pos.x][m_pos.y + 2] == nullptr)
 					pos.push_back(sf::Vector2i(m_pos.x, m_pos.y + 2));
 
-		if (game->m_board[m_pos.x - 1][m_pos.y + 1] != nullptr)  //beat
-		{
-			if (game->m_board[m_pos.x - 1][m_pos.y + 1]->GetColor() != m_color)
-				pos.push_back(sf::Vector2i(m_pos.x - 1, m_pos.y + 1));
-		}
-		if (game->m_board[m_pos.x + 1][m_pos.y + 1] != nullptr)  //beat
-		{
-			if (game->m_board[m_pos.x + 1][m_pos.y + 1]->GetColor() != m_color)
-				pos.push_back(sf::Vector2i(m_pos.x + 1, m_pos.y + 1));
-		}
-
+		if (m_pos.x > 0 && m_pos.y < 7)
+			if (game->m_board[m_pos.x - 1][m_pos.y + 1] != nullptr)  //beat
+			{
+				if (game->m_board[m_pos.x - 1][m_pos.y + 1]->GetColor() != m_color)
+					pos.push_back(sf::Vector2i(m_pos.x - 1, m_pos.y + 1));
+			}
+		if (m_pos.x < 7 && m_pos.y < 7)
+			if (game->m_board[m_pos.x + 1][m_pos.y + 1] != nullptr)  //beat
+			{
+				if (game->m_board[m_pos.x + 1][m_pos.y + 1]->GetColor() != m_color)
+					pos.push_back(sf::Vector2i(m_pos.x + 1, m_pos.y + 1));
+			}
 	}
 
 	return pos;

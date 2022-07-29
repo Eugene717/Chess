@@ -19,11 +19,12 @@ void ChessFigure::LoadFiles()
 	++ChessNum;
 }
 
-ChessFigure::ChessFigure(sf::Vector2i&& pos, char&& color) noexcept : m_pos(std::move(pos)), m_color(std::move(color))
+ChessFigure::ChessFigure(sf::Vector2i&& pos,const char& color) noexcept : m_pos(std::move(pos)), m_color(color)
 {
 	LoadFiles();
 
 	m_sprite.setOrigin(50, 50);
+	m_firstTurn = false;
 }
 
 ChessFigure::~ChessFigure()
@@ -31,7 +32,7 @@ ChessFigure::~ChessFigure()
 	--ChessNum;
 }
 
-bool ChessFigure::GetColor() const
+char ChessFigure::GetColor() const
 {
 	return m_color;
 }
@@ -104,6 +105,7 @@ bool ChessFigure::Move()
 				}
 
 				m_pos = i;
+				m_firstTurn = true;
 
 				if (beated)
 					m_beat.play();

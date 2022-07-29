@@ -15,6 +15,7 @@ class ChessFigure :public sf::Drawable
 protected:
 	char m_color;
 	char m_alived;
+	bool m_firstTurn;
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
 
@@ -23,11 +24,11 @@ protected:
 
 	sf::Vector2i m_pos;
 public:
-	ChessFigure(sf::Vector2i&& pos, char&& color) noexcept;
+	ChessFigure(sf::Vector2i&& pos, const char& color) noexcept;
 	~ChessFigure();
 	bool Move();
 	virtual std::vector<sf::Vector2i> CanMove() const = 0;
-	bool GetColor() const;
+	char GetColor() const;
 	void Kill();
 	bool CheckAlived() const;
 

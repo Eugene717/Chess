@@ -53,16 +53,6 @@ Player::Player(char&& color) :m_color(std::move(color))
 	}
 
 	return;
-	//for (int i = 0; i < 8; i++)
-	//{
-	//	for (int j = 0; j < 8; j++)
-	//	{
-	//		if (game->m_board[i][j] == m_color)
-	//		{
-	//			//m_figures.push_back(ChessPiece(sf::Vector2i(i, j), game->m_board[i][j]));
-	//		}
-	//	}
-	//}
 }
 
 Player::~Player()
@@ -92,6 +82,11 @@ bool Player::DeleteKilled()
 	}
 	else
 		return false;
+}
+
+bool Player::KingKilled()
+{
+	return !m_figures[m_figures.size() - 1]->CheckAlived();
 }
 
 char Player::GetColor() const

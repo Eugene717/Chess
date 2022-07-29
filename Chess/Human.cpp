@@ -18,11 +18,6 @@ void Human::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		game->m_window.draw(*m_p_moved_figure);
 }
 
-std::vector<sf::Vector2i> Human::GetCanMovePos() const
-{
-	return std::vector<sf::Vector2i>();
-}
-
 bool Human::Move()
 {
 	Game* game = Game::GetInstance();

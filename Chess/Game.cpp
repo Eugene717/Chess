@@ -223,15 +223,20 @@ void Game::AnnounceWinner(const char& color, const std::string name = "\0")
 	m_window.clear(sf::Color::White);
 	m_window.draw(announce);
 	m_window.display();
-	sf::sleep(sf::seconds(2));
+	sf::sleep(sf::seconds(3));
 
-	//SetStartedBoard();
 	GameEnd();
 }
 
 void Game::GameEnd()
 {
-	//SetStartedBoard();
+	for (size_t i = 0; i < 8; i++)
+	{
+		for (size_t j = 0; j < 8; j++)
+		{
+			m_board[i][j] = nullptr;
+		}
+	}
 	delete m_pImpl->m_playerOne;
 	delete m_pImpl->m_playerTwo;
 	m_pImpl->m_playerOne = nullptr;
@@ -331,18 +336,31 @@ void Game::OnePC()
 
 		DrawGame();
 
-		m_pImpl->m_playerOne->DeleteKilled();
+		if (m_pImpl->m_playerOne->KingKilled())
+		{
+			AnnounceWinner(m_pImpl->m_playerOne->GetColor());
+			delete m_pImpl->m_playerOne;
+			delete m_pImpl->m_playerTwo;
+			return;
+		}
+		m_pImpl->m_playerOne->DeleteKilled(); 
 
 		m_pImpl->m_playerOne->Move();
 
 		if (m_pImpl->m_returnToMainMenu)
 		{
 			m_pImpl->m_returnToMainMenu = false;
+			GameEnd();
+			return;
+		}
+
+		if (m_pImpl->m_playerTwo->KingKilled())
+		{
+			AnnounceWinner(m_pImpl->m_playerTwo->GetColor());
 			delete m_pImpl->m_playerOne;
 			delete m_pImpl->m_playerTwo;
 			return;
 		}
-
 		m_pImpl->m_playerTwo->DeleteKilled();
 
 		m_pImpl->m_playerTwo->Move();
@@ -350,8 +368,7 @@ void Game::OnePC()
 		if (m_pImpl->m_returnToMainMenu)
 		{
 			m_pImpl->m_returnToMainMenu = false;
-			delete m_pImpl->m_playerOne;
-			delete m_pImpl->m_playerTwo;
+			GameEnd();
 			return;
 		}
 
