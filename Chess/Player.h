@@ -17,6 +17,7 @@ public:
 
 	bool DeleteKilled();
 	bool KingKilled();
+	char PawnUp();
 	char GetColor() const;
 	virtual bool Move() = 0;
 };

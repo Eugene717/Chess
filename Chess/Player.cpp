@@ -93,3 +93,108 @@ char Player::GetColor() const
 {
 	return m_color;
 }
+
+char Player::PawnUp()
+{
+	Game* game = Game::GetInstance();
+
+	sf::Texture t_queen;  sf::Sprite s_queen;
+	sf::Texture t_bishop; sf::Sprite s_bishop;
+	sf::Texture t_horse;  sf::Sprite s_horse;
+	sf::Texture t_rock;   sf::Sprite s_rock;
+
+	if (m_color == 'w')
+	{
+		t_queen.loadFromFile("resourses/images/wq.png");
+		t_bishop.loadFromFile("resourses/images/wb.png");
+		t_horse.loadFromFile("resourses/images/wh.png");
+		t_rock.loadFromFile("resourses/images/wr.png");
+	}
+	else
+	{
+		t_queen.loadFromFile("resourses/images/bq.png");
+		t_bishop.loadFromFile("resourses/images/bb.png");
+		t_horse.loadFromFile("resourses/images/bh.png");
+		t_rock.loadFromFile("resourses/images/br.png");
+	}
+	s_queen.setTexture(t_queen);  s_queen.setOrigin(50, 50);
+	s_bishop.setTexture(t_bishop);  s_bishop.setOrigin(50, 50);
+	s_horse.setTexture(t_horse);  s_horse.setOrigin(50, 50);
+	s_rock.setTexture(t_rock);  s_rock.setOrigin(50, 50);
+	
+	sf::RectangleShape shape;
+	shape.setFillColor(sf::Color(80, 80, 80));
+	shape.setOutlineThickness(3);
+	shape.setOutlineColor(sf::Color::Black);
+	shape.setSize(sf::Vector2f(400, 100));
+	shape.setOrigin(200, 50);
+	shape.setPosition(400, 400);
+
+	s_queen.setPosition(shape.getGlobalBounds().left + 50, shape.getGlobalBounds().top + 50);
+	s_bishop.setPosition(shape.getGlobalBounds().left + 150, shape.getGlobalBounds().top + 50);
+	s_horse.setPosition(shape.getGlobalBounds().left + 250, shape.getGlobalBounds().top + 50);
+	s_rock.setPosition(shape.getGlobalBounds().left + 350, shape.getGlobalBounds().top + 50);
+
+	game->DrawGame();
+
+	char figure = 'p';
+
+	while (game->m_window.isOpen())
+	{
+		if (game->m_window.pollEvent(game->m_event))
+		{
+			if (game->m_event.type == sf::Event::Closed)
+				game->m_window.close();
+
+			if (game->m_event.type == sf::Event::MouseButtonReleased)
+			{
+				if (game->m_event.key.code == sf::Mouse::Left)
+				{
+					if (figure != 'p')
+					{
+						game->m_window.clear(sf::Color::White);
+						game->m_dataPacket.m_pawnUp = figure;
+						return figure;
+					}
+				}
+			}
+		}
+
+		s_queen.setScale(1, 1);
+		s_bishop.setScale(1, 1);
+		s_horse.setScale(1, 1);
+		s_rock.setScale(1, 1);
+		figure = 'p';
+		
+		if (sf::IntRect(s_queen.getGlobalBounds()).contains(sf::Mouse::getPosition(game->m_window)))
+		{
+			s_queen.setScale(1.1, 1.1);
+			figure = 'q';
+		}
+		else if (sf::IntRect(s_bishop.getGlobalBounds()).contains(sf::Mouse::getPosition(game->m_window)))
+		{
+			s_bishop.setScale(1.1, 1.1);
+			figure = 'b';
+		}
+		else if (sf::IntRect(s_horse.getGlobalBounds()).contains(sf::Mouse::getPosition(game->m_window)))
+		{
+			s_horse.setScale(1.1, 1.1);
+			figure = 'h';
+		}
+		else if (sf::IntRect(s_rock.getGlobalBounds()).contains(sf::Mouse::getPosition(game->m_window)))
+		{
+			s_rock.setScale(1.1, 1.1);
+			figure = 'r';
+		}
+
+		game->m_window.draw(shape);
+		game->m_window.draw(s_queen);
+		game->m_window.draw(s_bishop);
+		game->m_window.draw(s_horse);
+		game->m_window.draw(s_rock);
+
+		game->m_window.display();
+	}
+
+	return figure;
+}

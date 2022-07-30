@@ -1,5 +1,9 @@
 #include "Pawn.h"
 #include "Game.h"
+#include "Queen.h"
+#include "Bishop.h"
+#include "Horse.h"
+#include "Rock.h"
 
 Pawn::Pawn(sf::Vector2i&& pos, char&& color) noexcept : ChessFigure(std::move(pos), std::move(color))
 {
@@ -72,3 +76,4 @@ std::vector<sf::Vector2i> Pawn::CanMove() const
 
 	return pos;
 }
+

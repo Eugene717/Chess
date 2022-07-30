@@ -9,6 +9,7 @@ protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 public:
     Human(char&& color);
+    void PawnChange(const char& figure);
     bool Move() override;
     bool MoveMP();
 };

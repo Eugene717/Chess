@@ -1,6 +1,10 @@
 #include "Human.h"
 #include "Game.h"
 #include "ChessFigure.h"
+#include "Queen.h"
+#include "Bishop.h"
+#include "Horse.h"
+#include "Rock.h"
 
 Human::Human(char&& color) :Player(std::move(color))
 { }
@@ -16,6 +20,34 @@ void Human::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	}
 	if (m_p_moved_figure != nullptr)
 		game->m_window.draw(*m_p_moved_figure);
+}
+
+void Human::PawnChange(const char& figure)
+{
+	if (figure == 'q')
+	{
+		ChessFigure* temp = new Queen(m_p_moved_figure->GetPosition(), GetColor());
+		delete m_p_moved_figure;
+		(*std::find(m_figures.begin(), m_figures.end(), m_p_moved_figure)) = temp;
+	}
+	else if (figure == 'b')
+	{
+		ChessFigure* temp = new Bishop(m_p_moved_figure->GetPosition(), GetColor());
+		delete m_p_moved_figure;
+		(*std::find(m_figures.begin(), m_figures.end(), m_p_moved_figure)) = temp;
+	}
+	else if (figure == 'h')
+	{
+		ChessFigure* temp = new Horse(m_p_moved_figure->GetPosition(), GetColor());
+		delete m_p_moved_figure;
+		(*std::find(m_figures.begin(), m_figures.end(), m_p_moved_figure)) = temp;
+	}
+	else if (figure == 'r')
+	{
+		ChessFigure* temp = new Rock(m_p_moved_figure->GetPosition(), GetColor());
+		delete m_p_moved_figure;
+		(*std::find(m_figures.begin(), m_figures.end(), m_p_moved_figure)) = temp;
+	}
 }
 
 bool Human::Move()
@@ -75,6 +107,22 @@ bool Human::Move()
 
 						game->m_dataPacket.m_finishPos.x = m_p_moved_figure->GetPosition().x;
 						game->m_dataPacket.m_finishPos.y = m_p_moved_figure->GetPosition().y;
+
+						game->DrawGame();
+
+						if (m_p_moved_figure->GetStatus() == 'p')
+						{
+							if (GetColor() == 'w')
+							{
+								if (m_p_moved_figure->GetPosition().y == 0)
+									PawnChange(PawnUp());
+							}
+							else
+							{
+								if (m_p_moved_figure->GetPosition().y == 7)
+									PawnChange(PawnUp());
+							}
+						}
 
 						m_p_moved_figure = nullptr;
 

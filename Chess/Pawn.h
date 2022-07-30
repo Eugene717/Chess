@@ -1,5 +1,11 @@
 #pragma once
 #include "ChessFigure.h"
+
+class Queen;
+class Bishop;
+class Horse;
+class Rock;
+
 class Pawn :
     public ChessFigure
 {
