@@ -26,11 +26,13 @@ protected:
 public:
 	ChessFigure(sf::Vector2i&& pos, const char& color) noexcept;
 	~ChessFigure();
-	bool Move();
+	virtual bool Move();
 	virtual std::vector<sf::Vector2i> CanMove() const = 0;
 	char GetColor() const;
 	void Kill();
 	bool CheckAlived() const;
+	char GetStatus() const;
+	bool FirstTurn() const;
 
 	bool operator==(const sf::Vector2i& other);
 	sf::FloatRect getGlobalBounds() const;

@@ -6,6 +6,7 @@ class King :
 {
 public:
     King(sf::Vector2i&& pos, char&& color) noexcept;
+    bool Move() override;
     std::vector<sf::Vector2i> CanMove() const override;
 };
 

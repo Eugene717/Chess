@@ -50,6 +50,16 @@ bool ChessFigure::CheckAlived() const
 		return true;
 }
 
+char ChessFigure::GetStatus() const
+{
+	return m_alived;
+}
+
+bool ChessFigure::FirstTurn() const
+{
+	return m_firstTurn;
+}
+
 bool ChessFigure::operator==(const sf::Vector2i& other)
 {
 	return m_pos.x == other.x && m_pos.y == other.y;

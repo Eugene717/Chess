@@ -26,8 +26,8 @@ Player::Player(char&& color) :m_color(std::move(color))
 		m_figures.push_back(new Bishop(sf::Vector2i(2, 7), 'w'));
 		m_figures.push_back(new Bishop(sf::Vector2i(5, 7), 'w'));
 
-		m_figures.push_back(new Queen(sf::Vector2i(4, 7), 'w'));
-		m_figures.push_back(new King(sf::Vector2i(3, 7), 'w'));
+		m_figures.push_back(new Queen(sf::Vector2i(3, 7), 'w'));
+		m_figures.push_back(new King(sf::Vector2i(4, 7), 'w'));
 	}
 	else
 	{
