@@ -89,6 +89,31 @@ bool Player::KingKilled()
 	return !m_figures[m_figures.size() - 1]->CheckAlived();
 }
 
+sf::Vector2i Player::GetKingPos() const
+{
+	return m_figures[m_figures.size() - 1]->GetPosition();
+}
+
+bool Player::CheckCheck(const sf::Vector2i& kingPos) const
+{
+	Game* game = Game::GetInstance();
+
+	std::vector<sf::Vector2i> pos;
+
+	for (int i = 0; i < m_figures.size() - 1; i++)
+	{
+		pos = m_figures[i]->CanMove();
+
+		for (int j = 0; j < pos.size(); j++)
+		{
+			if (pos[j].x == kingPos.x && pos[j].y == kingPos.y)
+				return true;
+		}
+	}
+
+	return false;
+}
+
 char Player::GetColor() const
 {
 	return m_color;

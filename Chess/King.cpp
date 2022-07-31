@@ -78,33 +78,36 @@ std::vector<sf::Vector2i> King::CanMove() const
 
 	if (!m_firstTurn)  //castling
 	{
-		for (size_t i = m_pos.x + 1; i < 8; i++)  //right
+		if (!game->ReturnCheck(m_color))
 		{
-			if (game->m_board[i][m_pos.y] != nullptr)
-				if (game->m_board[i][m_pos.y]->GetStatus() == 'r')  //rock
-				{
-					if (!game->m_board[i][m_pos.y]->FirstTurn())
+			for (size_t i = m_pos.x + 1; i < 8; i++)  //right
+			{
+				if (game->m_board[i][m_pos.y] != nullptr)
+					if (game->m_board[i][m_pos.y]->GetStatus() == 'r')  //rock
 					{
-						pos.push_back(sf::Vector2i(i - 1, m_pos.y));  //castling
-						//pos.push_back(sf::Vector2i(i, m_pos.y));
+						if (!game->m_board[i][m_pos.y]->FirstTurn())
+						{
+							pos.push_back(sf::Vector2i(i - 1, m_pos.y));  //castling
+							//pos.push_back(sf::Vector2i(i, m_pos.y));
+						}
 					}
-				}
-				else
-					break;
-		}
-		for (size_t i = m_pos.x - 1; i >= 0; i--)  //left
-		{
-			if (game->m_board[i][m_pos.y] != nullptr)
-				if (game->m_board[i][m_pos.y]->GetStatus() == 'r')  //rock
-				{
-					if (!game->m_board[i][m_pos.y]->FirstTurn())
+					else
+						break;
+			}
+			for (size_t i = m_pos.x - 1; i >= 0; i--)  //left
+			{
+				if (game->m_board[i][m_pos.y] != nullptr)
+					if (game->m_board[i][m_pos.y]->GetStatus() == 'r')  //rock
 					{
-						pos.push_back(sf::Vector2i(i + 2, m_pos.y));  //castling
-						//pos.push_back(sf::Vector2i(i, m_pos.y));
+						if (!game->m_board[i][m_pos.y]->FirstTurn())
+						{
+							pos.push_back(sf::Vector2i(i + 2, m_pos.y));  //castling
+							//pos.push_back(sf::Vector2i(i, m_pos.y));
+						}
 					}
-				}
-				else
-					break;
+					else
+						break;
+			}
 		}
 	}
 

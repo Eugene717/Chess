@@ -76,7 +76,7 @@ int Game::MainMenu()
 	exit.setCharacterSize(44);
 	exit.setPosition(centerPos - exit.getGlobalBounds().width / 2, multiplayer.getPosition().y + 120);
 
-	int menuNum;
+	int menuNum = -1;
 
 	while (m_window.isOpen())
 	{
@@ -191,6 +191,18 @@ void Game::DrawPossibleMoves(const std::vector<sf::Vector2i>& pos, const char& p
 	}
 
 	m_window.display();
+}
+
+bool Game::ReturnCheck(const char& color) const
+{
+	if (m_pImpl->m_playerOne->GetColor() == color)
+	{
+		return m_pImpl->m_playerTwo->CheckCheck(m_pImpl->m_playerOne->GetKingPos());
+	}
+	else
+	{
+		return m_pImpl->m_playerOne->CheckCheck(m_pImpl->m_playerTwo->GetKingPos());
+	}	
 }
 
 void Game::AnnounceWinner(const char& color, const std::string name = "\0")

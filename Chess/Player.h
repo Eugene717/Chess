@@ -17,6 +17,8 @@ public:
 
 	bool DeleteKilled();
 	bool KingKilled();
+	sf::Vector2i GetKingPos() const;
+	bool CheckCheck(const sf::Vector2i& kingPos) const;
 	char PawnUp();
 	char GetColor() const;
 	virtual bool Move() = 0;

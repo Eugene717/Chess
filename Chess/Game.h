@@ -35,6 +35,7 @@ public:
 	int MainMenu();
 	void DrawGame();
 	void DrawPossibleMoves(const std::vector<sf::Vector2i>& pos, const char& player);
+	bool ReturnCheck(const char& color) const;
 	bool Exit();
 
 	void SinglePlayer();
