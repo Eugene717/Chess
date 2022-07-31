@@ -1,5 +1,6 @@
 #pragma once
 #include "Player.h"
+#include <SFML/Network.hpp>
 
 class Human :
     public Player
@@ -11,6 +12,6 @@ public:
     Human(char&& color);
     void PawnChange(const char& figure);
     bool Move() override;
-    bool MoveMP();
+    bool MoveMP(sf::TcpSocket& socket);
 };
 

@@ -22,7 +22,7 @@ class Game
 	void AnnounceWinner(const char& color, const std::string name);
 	void GameEnd();
 	char SearchGame(sf::TcpSocket& socket);
-	void ShutdownMes(const int& playerN);
+	void ShutdownMes();
 public:
 	ChessFigure* m_board[8][8];
 	GameDataPacket m_dataPacket;  //для игрока(костыль?)

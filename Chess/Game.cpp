@@ -346,50 +346,37 @@ void Game::OnePC()
 				m_window.close();
 		}
 
-		DrawGame();
+		DrawGame();		
 
-		if (m_pImpl->m_playerOne->KingKilled())
+		if (m_pImpl->m_playerOne->Move())
 		{
-			AnnounceWinner(m_pImpl->m_playerOne->GetColor());
-			delete m_pImpl->m_playerOne;
-			delete m_pImpl->m_playerTwo;
-			return;
-		}
-		m_pImpl->m_playerOne->DeleteKilled(); 
-
-		m_pImpl->m_playerOne->Move();
-
-		if (m_pImpl->m_returnToMainMenu)
-		{
-			m_pImpl->m_returnToMainMenu = false;
-			GameEnd();
-			return;
+			if (m_pImpl->m_playerTwo->KingKilled())
+			{
+				AnnounceWinner(m_pImpl->m_playerOne->GetColor());
+				delete m_pImpl->m_playerOne;
+				delete m_pImpl->m_playerTwo;
+				return;
+			}
+			m_pImpl->m_playerTwo->DeleteKilled();
 		}
 
-		if (m_pImpl->m_playerTwo->KingKilled())
+		if (m_pImpl->m_playerTwo->Move())
 		{
-			AnnounceWinner(m_pImpl->m_playerTwo->GetColor());
-			delete m_pImpl->m_playerOne;
-			delete m_pImpl->m_playerTwo;
-			return;
+			if (m_pImpl->m_playerOne->KingKilled())
+			{
+				AnnounceWinner(m_pImpl->m_playerTwo->GetColor());
+				delete m_pImpl->m_playerOne;
+				delete m_pImpl->m_playerTwo;
+				return;
+			}
+			m_pImpl->m_playerOne->DeleteKilled();
 		}
-		m_pImpl->m_playerTwo->DeleteKilled();
-
-		m_pImpl->m_playerTwo->Move();
-
-		if (m_pImpl->m_returnToMainMenu)
-		{
-			m_pImpl->m_returnToMainMenu = false;
-			GameEnd();
-			return;
-		}
-
 	}
 }
 
 void Game::Multiplayer()
 {
-	/*sf::TcpSocket socket;
+	sf::TcpSocket socket;
 
 	char turn;
 	while (true)
@@ -403,7 +390,20 @@ void Game::Multiplayer()
 			break;
 	}
 
+	if (turn == 'f')
+	{
+		m_pImpl->m_playerOne = new Human('w');
+		m_pImpl->m_playerTwo = new Human('b');
+	}
+	else
+	{
+		m_pImpl->m_playerOne = new Human('b');
+		m_pImpl->m_playerTwo = new Human('w');
+	}
+
+	m_pImpl->m_MP = true;
 	sf::Packet packet;
+	socket.setBlocking(false);
 
 	while (m_window.isOpen())
 	{
@@ -417,91 +417,58 @@ void Game::Multiplayer()
 
 		if (turn == 'f')
 		{
-			while (m_pImpl->m_playerOne->MakeMove())
+			DrawGame();
+
+			if (socket.receive(packet) == sf::Socket::Disconnected)
 			{
-				if (!m_pImpl->m_playerTwo->EatChecker())
-				{
-					DrawGame();
-
-					if (!m_pImpl->m_playerOne->CanBeatAgain())
-						break;
-					else
-					{
-						packet << m_dataPacket;
-						socket.send(packet);
-						packet.clear();
-					}
-				}
-				else
-				{
-					DrawGame();
-
-					packet << m_dataPacket;
-					socket.send(packet);
-					packet.clear();
-					socket.disconnect();
-					m_pImpl->m_MP = false;
-
-					AnnounceWinner(m_pImpl->m_playerOne->GetColor(), m_pImpl->m_playerOne->GetName());
-					return;
-				}
-			}
-			if (!m_dataPacket.m_finishGame)
-			{
-				packet << m_dataPacket;
-				socket.send(packet);
-				packet.clear();
-
-				turn = 's';
-			}
-			else
-			{
+				ShutdownMes();
+				AnnounceWinner(m_pImpl->m_playerOne->GetColor());
 				socket.disconnect();
-				GameEnd();
 				return;
 			}
+
+			m_pImpl->m_playerOne->Move();
+
+			packet << m_dataPacket;
+			socket.send(packet);
+			packet.clear();
+
+			if (m_pImpl->m_playerTwo->KingKilled())
+			{
+				AnnounceWinner(m_pImpl->m_playerOne->GetColor());
+				socket.disconnect();
+				return;
+			}
+			m_pImpl->m_playerTwo->DeleteKilled();
+
+			turn = 's';
 		}
 		else
 		{
-			sf::Socket::Status status = socket.receive(packet);
-			if (status == sf::Socket::Done)
-			{
-				packet >> m_dataPacket;
-				packet.clear();
 
-				if (static_cast<Human*>(m_pImpl->m_playerTwo)->MoveMP())
+			if (static_cast<Human*>(m_pImpl->m_playerTwo)->MoveMP(socket))
+			{
+				if (m_pImpl->m_playerOne->KingKilled())
 				{
-					if (!m_pImpl->m_playerOne->EatChecker())
-					{
-						DrawGame();
-
-						if (!m_pImpl->m_playerTwo->CanBeatAgain())
-							turn = 'f';
-					}
-					else
-					{
-						DrawGame();
-						socket.disconnect();
-						m_pImpl->m_MP = false;
-
-						AnnounceWinner(m_pImpl->m_playerTwo->GetColor(), m_pImpl->m_playerTwo->GetName());
-						return;
-					}
+					AnnounceWinner(m_pImpl->m_playerOne->GetColor());
+					socket.disconnect();
+					return;
 				}
-				else
-					turn = 'f';
+				m_pImpl->m_playerOne->DeleteKilled();
 			}
-			else if (status == sf::Socket::Status::Disconnected)
-			{
-				socket.disconnect();
 
-				ShutdownMes(2);
-				AnnounceWinner(m_pImpl->m_playerOne->GetColor(), m_pImpl->m_playerOne->GetName());
+			if (socket.receive(packet) == sf::Socket::Disconnected)
+			{
+				ShutdownMes();
+				AnnounceWinner(m_pImpl->m_playerOne->GetColor());
+				socket.disconnect();
 				return;
 			}
+
+			turn = 'f';
 		}
 	}
-	socket.disconnect();*/
+	socket.disconnect();
 }
 
 char Game::SearchGame(sf::TcpSocket& socket)
@@ -518,7 +485,7 @@ char Game::SearchGame(sf::TcpSocket& socket)
 	m_window.draw(loading);
 	m_window.display();
 
-	if (socket.connect("localhost", 55001, sf::seconds(3)) != sf::Socket::Status::Done)   //192.178.0.105 for example
+	if (socket.connect("localhost", 55003, sf::seconds(3)) != sf::Socket::Status::Done)   //192.178.0.105 for example
 	{
 		loading.setString("       Failed connection\nCheck Ethernet connection");
 		loading.setCharacterSize(24);
@@ -571,13 +538,7 @@ char Game::SearchGame(sf::TcpSocket& socket)
 			socket.send(packet);
 			packet.clear();
 
-			socket.setBlocking(true);
-
-			if (socket.receive(packet) == sf::Socket::Done)
-			{
-				packet.clear();
-			}
-
+			m_window.clear(sf::Color::White);
 			m_window.draw(loading);
 			m_window.display();
 			sf::sleep(sf::seconds(1));
@@ -602,7 +563,7 @@ char Game::SearchGame(sf::TcpSocket& socket)
 	return '\1';
 }
 
-void Game::ShutdownMes(const int& playerN)
+void Game::ShutdownMes()
 {
 	sf::Vector2f centerPos = sf::Vector2f(m_window.getSize().x / 2, m_window.getSize().y / 2 - 40);
 

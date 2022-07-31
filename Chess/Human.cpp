@@ -147,18 +147,40 @@ bool Human::Move()
 	}
 }
 
-bool Human::MoveMP()
+bool Human::MoveMP(sf::TcpSocket& socket)
 {
 	Game* game = Game::GetInstance();
-	
-	int nChecker = -1;
 
-	for (int i = 0; i < m_figures.size(); i++)
+	GameDataPacket* dataPacket = &game->m_dataPacket;
+	sf::Packet packet;
+
+	while (game->m_window.isOpen())
 	{
-		if (*m_figures[i] == game->m_dataPacket.m_starterPos)
+		while (game->m_window.pollEvent(game->m_event))
 		{
-			/*m_NbeatChecker = i;
-			return m_checkers[i].Move(sf::Vector2f(game->m_dataPacket.m_finishPos.y * 56 + 29, game->m_dataPacket.m_finishPos.x * 56 +29), true, m_queened).second;*/
+			if (game->m_event.type == sf::Event::Closed)
+				game->m_window.close();
+		}
+
+		game->m_window.clear(sf::Color::White);
+		game->DrawGame();
+
+		sf::Socket::Status status = socket.receive(packet);
+		if (status == sf::Socket::Disconnected)
+			return false;
+		if (status == sf::Socket::Done)
+		{
+			packet >> *dataPacket;
+			packet.clear();
+
+			for (int i = 0; i < m_figures.size(); i++)
+			{
+				if (*m_figures[i] == game->m_dataPacket.m_starterPos)
+				{
+					m_figures[i]->setPosition(game->m_dataPacket.m_finishPos.x * 100 + 50, game->m_dataPacket.m_finishPos.y * 100 + 50);
+					return m_figures[i]->Move();
+				}
+			}
 		}
 	}
 	return false;
