@@ -450,7 +450,7 @@ void Game::Multiplayer()
 			{
 				if (m_pImpl->m_playerOne->KingKilled())
 				{
-					AnnounceWinner(m_pImpl->m_playerOne->GetColor());
+					AnnounceWinner(m_pImpl->m_playerTwo->GetColor());
 					socket.disconnect();
 					return;
 				}
