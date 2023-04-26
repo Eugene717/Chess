@@ -36,6 +36,7 @@ Game::Game()
 	m_pImpl = new GameIMPL;
 	m_pImpl->m_font.loadFromFile("resourses/arial.ttf");
 	m_window.create(sf::VideoMode(800, 800), "Checkers");
+	m_window.setFramerateLimit(60);
 }
 
 Game* Game::GetInstance()
