@@ -1,4 +1,5 @@
 # Chess
+Windows Chess is a two-player board game played on an 8x8 grid with specific movement rules for 16 pieces. The objective of the game is to 'checkmate' the opponent's king by putting it in a position where it cannot escape capture. The game can be played as a singleplayer vs bot or multiplayer on one PC.
 
 ## Gameplay:
 - Chess is a two-player board game played on an 8x8 grid.
