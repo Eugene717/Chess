@@ -10,7 +10,6 @@ Windows Chess is a two-player board game played on an 8x8 grid with specific mov
 - Each player starts with 16 pieces, including a king, queen, knights, bishops, rooks, and pawns, with specific movement rules.
 - The objective of the game is to "checkmate" the opponent's king by putting it in a position where it cannot escape capture.
 - Players take turns moving their pieces on the board, trying to capture their opponent's pieces while avoiding being captured themselves.
-
 - Musical accompaniment
 
 ## Installation:
